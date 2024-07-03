@@ -88,6 +88,7 @@ export async function transferNFT({
 
     const signingCosmwasmClient = await SigningCosmWasmClient.connectWithSigner(
         rpcUrl,
+        // @ts-ignore
         signer
     );
     const timeoutTimestamp = Math.floor(Date.now() / 1000) + 60 * 5;
