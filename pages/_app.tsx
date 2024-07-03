@@ -1,3 +1,4 @@
+import "@leapwallet/cosmos-social-login-capsule-provider-ui/styles.css";
 import "../styles/globals.css";
 import "@leapwallet/embedded-wallet-sdk-react/styles.css";
 import type { AppProps } from "next/app";
@@ -17,6 +18,7 @@ import ConnectWalletSideCurtain from "../components/ConnectWalletSideCurtain/con
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import "@leapwallet/elements/styles.css";
+import { OAuthMethod } from "@leapwallet/cosmos-social-login-capsule-provider";
 
 if (typeof global.self === "undefined") {
   (global as any).self = global;
@@ -144,7 +146,7 @@ export function CustomCapsuleModalViewX() {
   const [showCapsuleModal, setShowCapsuleModal] = useState(false);
 
   return (
-    <>
+    <div className="leap-ui z-[9999] fixed">
       <CCUI
         showCapsuleModal={showCapsuleModal}
         setShowCapsuleModal={setShowCapsuleModal}
@@ -155,8 +157,9 @@ export function CustomCapsuleModalViewX() {
         onLoginFailure={() => {
           window.failureFromCapsuleModal();
         }}
+        oAuthMethods={[OAuthMethod.GOOGLE, OAuthMethod.APPLE, OAuthMethod.TWITTER,OAuthMethod.DISCORD]}
       />
       <TransactionSigningModal dAppInfo={{ name: "Celestine Sloths" }} />
-    </>
+    </div>
   );
 }
