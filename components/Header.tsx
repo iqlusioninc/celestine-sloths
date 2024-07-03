@@ -37,7 +37,7 @@ export function Header({
   openEmbeddedWalletModal: Function;
   setIsElementsModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const { address, chain } = useChain("stargaze");
+  const { address, chain } = useChain("stargazetestnet");
 
   const [balance, setBalance] = useState(null);
 

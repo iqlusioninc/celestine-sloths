@@ -21,7 +21,11 @@ export default function Home() {
   const [collection, setCollection] = useState<string | undefined>();
   const router = useRouter();
 
-  const { status: walletConnectStatus, address, chain } = useChain("stargaze");
+  const {
+    status: walletConnectStatus,
+    address,
+    chain,
+  } = useChain("stargazetestnet");
   const [isElementsModalOpen, setIsElementsModalOpen] =
     useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

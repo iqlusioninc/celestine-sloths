@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function ElementsContainer({ isOpen, setIsOpen }: Props) {
-  const { address, openView } = useChain("stargaze");
+  const { address, openView } = useChain("stargazetestnet");
   const walletClient = useElementsWalletClient();
   useEffect(() => {
     const elementsModal = document.querySelector(".leap-ui");
