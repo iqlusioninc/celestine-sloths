@@ -59,6 +59,26 @@ export async function getSlothNFTs(
     );
 }
 
+const stargazeFee = {
+    amount: [
+        {
+            amount: "25000",
+            denom: "ustars",
+        },
+    ],
+    gas: "1000000",
+};
+
+const lazyFee = {
+    amount: [
+        {
+            amount: "25000",
+            denom: "ibc/C3E53D20BC7A4CC993B17C7971F8ECD06A433C10B6A96F4C4C3714F0624C56DA",
+        },
+    ],
+    gas: "1000000",
+};
+
 export async function transferNFT({
     client,
     chainId,
@@ -121,15 +141,7 @@ export async function transferNFT({
         },
     };
 
-    const fee = {
-        amount: [
-            {
-                amount: "25000",
-                denom: "ibc/C3E53D20BC7A4CC993B17C7971F8ECD06A433C10B6A96F4C4C3714F0624C56DA",
-            },
-        ],
-        gas: "1000000",
-    };
+    const fee = stargazeFee;
 
     return signingCosmwasmClient.execute(sender, nftContract, msg, fee);
 }
