@@ -1,11 +1,11 @@
+import { ApolloProvider as GraphqlProvider } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { ElementsContainerDynamic, Header } from "../components/Header";
+import { ElementsContainerDynamic } from "../components/Header";
 import { NFTs } from "../components/NFTList";
 import SendNFTsModal from "../components/SendNFTs/SendNFTsModal";
 import { isValidAddressWithPrefix } from "../config/validateAddress";
-import { ApolloProvider as GraphqlProvider } from "@apollo/client";
 
 import { useChain } from "@cosmos-kit/react";
 import {
@@ -135,13 +135,6 @@ export default function Home() {
     return (
         <>
             <div>
-                <Header
-                    openEmbeddedWalletModal={() => {
-                        setIsModalOpen(true);
-                    }}
-                    setIsSendNFTsModalOpen={setIsSendNFTsModalOpen}
-                    setIsElementsModalOpen={setIsElementsModalOpen}
-                />
                 <div className="px-10 sm:px-14 justify-center align-middle items-center self-center origin-center">
                     <NFTs
                         setIsElementsModalOpen={setIsElementsModalOpen}

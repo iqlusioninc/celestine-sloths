@@ -3,8 +3,6 @@ import { useChain } from "@cosmos-kit/react";
 import { sliceAddress } from "../config/formatAddress";
 import Image from "next/image";
 import Text from "./Text";
-import { useQuery } from "@chakra-ui/media-query";
-import { useEffect, useState } from "react";
 import { formatNumber, fromSmall } from "../config/mathutils";
 import { IoMdCloseCircle } from "react-icons/io";
 
