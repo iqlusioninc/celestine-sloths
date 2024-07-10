@@ -3,12 +3,8 @@ import { sliceAddress } from "../../../config/formatAddress";
 import { motion } from "framer-motion";
 import { useSendNFT } from "../../../context/SendNFT";
 
-export default function InputAddressDisplay({
-    setInputStateActive,
-}: {
-    setInputStateActive: (active: boolean) => void;
-}) {
-    const { setToAddress, toAddress } = useSendNFT();
+export default function InputAddressDisplay() {
+    const { setToAddress, toAddress, setInputStateActive } = useSendNFT();
 
     return (
         <motion.div

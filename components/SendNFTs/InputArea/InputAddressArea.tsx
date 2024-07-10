@@ -4,12 +4,8 @@ import { useEffect } from "react";
 import React from "react";
 import { useChain } from "@cosmos-kit/react";
 
-export default function InputAddressArea({
-    setInputStateActive,
-}: {
-    setInputStateActive: (active: boolean) => void;
-}) {
-    const { setToAddress, toAddress } = useSendNFT();
+export default function InputAddressArea() {
+    const { setToAddress, toAddress, setInputStateActive } = useSendNFT();
     const { chainWallet, openView } = useChain("stargazetestnet");
     const client = chainWallet?.client;
     const ref = React.useRef<HTMLInputElement>(null);
@@ -53,13 +49,15 @@ export default function InputAddressArea({
                     try {
                         if (!client) {
                             openView();
+                            return;
                         }
-                        if (client.getAccount) {
+                        if (!client.getAccount) {
                             throw new Error("Account not found");
                         }
                         const account = await client.getAccount("lazynet-1");
                         if (account?.address) {
                             setToAddress(account.address);
+                            setInputStateActive(false);
                         }
                     } catch {
                         //

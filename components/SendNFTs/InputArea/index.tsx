@@ -37,13 +37,9 @@ export default function InputArea() {
                 <div className="h-[1px] w-full bg-muted"></div>
                 <AnimatePresence mode="popLayout" initial={false}>
                     {inputStateActive ? (
-                        <InputAddressArea
-                            setInputStateActive={setInputStateActive}
-                        />
+                        <InputAddressArea />
                     ) : (
-                        <InputAddressDisplay
-                            setInputStateActive={setInputStateActive}
-                        />
+                        <InputAddressDisplay />
                     )}
                 </AnimatePresence>
             </div>
