@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { WalletButton } from "../components/WalletButton";
 import Text from "./Text";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import StargazeLogo from "../public/stargaze-logo.svg";
 
 export const ElementsContainerDynamic = dynamic(
@@ -38,8 +38,8 @@ export function Header({
     setIsElementsModalOpen: Dispatch<SetStateAction<boolean>>;
     setIsSendNFTsModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const router = useRouter();
-  const { address, chain } = useChain("stargazetestnet");
+    const router = useRouter();
+    const { address, chain } = useChain("stargazetestnet");
 
     const [balance, setBalance] = useState(null);
 
@@ -56,12 +56,11 @@ export function Header({
             <Image
                 src={CelestineSlothsSociety}
                 alt="celestine-sloths"
-                className="flex w-[70%] sm:w-[20%]"
+                className="flex w-[70%] sm:w-[20%] cursor-pointer"
                 onClick={() => {
-                    router.push('/');
-                  }}
+                    router.push("/");
+                }}
             />
-
 
             <button
                 className="sm:hidden"
@@ -74,30 +73,36 @@ export function Header({
                 )}
             </button>
 
-      <div id="nav-menu" className={`md:block ${isMenuOpen ? "" : "hidden"}`}>
-        <div className="flex flex-row gap-3 flex-wrap">
-          <button
-            onClick={() => {
-              router.push('/snapshot');
-            }}
-            className="flex gap-2 items-center h-10 justify-between border border-white-100 rounded-3xl px-5 py-2"
-          >
-            <Text size="sm" color="text-white-100 font-bold">
-              Snapshot
-            </Text>
-          </button>
+            <div
+                id="nav-menu"
+                className={`md:block ${isMenuOpen ? "" : "hidden"}`}
+            >
+                <div className="flex flex-row gap-3 flex-wrap">
+                    <button
+                        onClick={() => {
+                            router.push("/snapshot");
+                        }}
+                        className="flex gap-2 items-center h-10 justify-between border border-white-100 rounded-3xl px-5 py-2"
+                    >
+                        <Text size="sm" color="text-white-100 font-bold">
+                            Snapshot
+                        </Text>
+                    </button>
 
-          <button
-            onClick={() =>
-              window.open("https://twitter.com/CelestineSloths", "_blank")
-            }
-            className="flex flex-row gap-2 h-10 items-center justify-between border border-white-100 rounded-3xl px-5 py-2"
-          >
-            <FaXTwitter color="#FFF" size={16} />
-            <Text size="sm" color="text-white-100 font-bold">
-              Follow
-            </Text>
-          </button>
+                    <button
+                        onClick={() =>
+                            window.open(
+                                "https://twitter.com/CelestineSloths",
+                                "_blank"
+                            )
+                        }
+                        className="flex flex-row gap-2 h-10 items-center justify-between border border-white-100 rounded-3xl px-5 py-2"
+                    >
+                        <FaXTwitter color="#FFF" size={16} />
+                        <Text size="sm" color="text-white-100 font-bold">
+                            Follow
+                        </Text>
+                    </button>
 
                     <button
                         onClick={() => {

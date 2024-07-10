@@ -2,9 +2,12 @@ import { useQuery } from "@apollo/client";
 
 import { toUtf8 } from "@cosmjs/encoding";
 import { useChain, useWalletClient } from "@cosmos-kit/react";
+import BN from "bignumber.js";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { cosmwasm } from "stargazejs";
+import { cosmwasm, getSigningCosmwasmClient } from "stargazejs";
 import { GenericNFTCard } from "./GenericNFTCard";
+
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import toast from "react-hot-toast";
 import { MdArrowUpward } from "react-icons/md";
@@ -15,8 +18,6 @@ import {
 import GenericNFTCardSkeleton from "./GenericNFTCardSkeleton";
 import { ListControl } from "./ListControl";
 import Text from "./Text";
-import { queryNFTs, SlothTransferInfo, transferNFT } from "./sloth";
-import { WalletClient } from "@cosmos-kit/core";
 
 const { executeContract } = cosmwasm.wasm.v1.MessageComposer.withTypeUrl;
 
@@ -288,7 +289,82 @@ export function NFTs({
         subtitle: string,
         imgUrl?: string
     ) => {
-        return;
+        if (!address) {
+            connect();
+            return;
+        }
+
+        const shouldOpenModal = BN(nft.listPrice.amount).gt(balance);
+        if (shouldOpenModal) {
+            setIsElementsModalOpen(true);
+            return;
+        }
+
+        try {
+            toast(`Please sign the transaction on your wallet`, {
+                className: "w-[400px]",
+            });
+            const twoWeekExpiry = 14 * 24 * 60 * 60 * 1000;
+            const tx = createBuyNftTx({
+                sender: address,
+                collection: nft.collection.contractAddress,
+                tokenId: parseInt(nft.tokenId),
+                expiry: ((Date.now() + twoWeekExpiry) * 1000_000).toString(),
+                funds: [
+                    {
+                        denom: nft.listPrice.denom,
+                        amount: nft.listPrice.amount,
+                    },
+                ],
+            });
+
+            const signer = getOfflineSignerDirect();
+
+            const signingCosmwasmClient = await getSigningCosmwasmClient({
+                rpcEndpoint: chain.apis?.rpc?.[0].address ?? "",
+                //@ts-ignore
+                signer: signer,
+            });
+
+            const fee = {
+                amount: [
+                    {
+                        amount: "0",
+                        denom: "ustars",
+                    },
+                ],
+                gas: "1000000",
+            };
+
+            const signedTx = await signingCosmwasmClient.sign(
+                address,
+                [tx],
+                fee,
+                ""
+            );
+            const txRaw = TxRaw.encode({
+                bodyBytes: signedTx.bodyBytes,
+                authInfoBytes: signedTx.authInfoBytes,
+                signatures: signedTx.signatures,
+            }).finish();
+
+            const res = signingCosmwasmClient.broadcastTx(txRaw);
+            const broadcastToast = toast("Broadcasting transaction", {
+                duration: 1000 * 60,
+            });
+            res.then((res: any) => {
+                toast.dismiss(broadcastToast);
+                toast.success(`Success! ${res.transactionHash}`, {
+                    className: "w-[400px]",
+                });
+                refetch();
+            }).catch((e: any) => {
+                toast.dismiss(broadcastToast);
+                toast.error(`Error: ${e.message}`, { className: "w-[400px]" });
+            });
+        } catch (e: any) {
+            toast.error(`Error: ${e.message}`);
+        }
     };
 
     return (
