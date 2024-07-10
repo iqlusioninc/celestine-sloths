@@ -1,20 +1,14 @@
-import { useQuery } from "@apollo/client";
-import { useChain } from "@cosmos-kit/react";
 import {
-    Button,
     Dialog,
     DialogContent,
     Drawer,
     DrawerContent,
 } from "@leapwallet/react-ui";
-import { useCallback, useState } from "react";
-import { FaArrowLeft, FaChevronDown, FaXmark } from "react-icons/fa6";
-import { useIsMobileView } from "../../hooks/useIsMobileView";
-import { getNFTTokenByOwner } from "../../queries/tokens.query";
 import { AnimatePresence, motion } from "framer-motion";
-import { usePreviousState } from "../../hooks/usePreviousState";
-import InputView from "./InputView";
+import { FaArrowLeft, FaXmark } from "react-icons/fa6";
 import { SendNFTProvider, useSendNFT } from "../../context/SendNFT";
+import { useIsMobileView } from "../../hooks/useIsMobileView";
+import InputView from "./InputView";
 
 type SendNFTsModalProps = {
     isSendNFTsModalOpen: boolean;
@@ -28,40 +22,40 @@ const SendNFTsModal = ({
     const { isMobile } = useIsMobileView();
     if (isMobile) {
         return (
-            <SendNFTProvider>
-                <Drawer
-                    open={isSendNFTsModalOpen}
-                    onOpenChange={setIsSendNFTsModalOpen}
-                >
-                    <DrawerContent className="p-0 w-full h-[80%] rounded-t-3xl border cursor-default flex flex-col justify-start items-center overflow-hidden">
+            <Drawer
+                open={isSendNFTsModalOpen}
+                onOpenChange={setIsSendNFTsModalOpen}
+            >
+                <DrawerContent className="p-0 w-full h-[80%] rounded-t-3xl border cursor-default flex flex-col justify-start items-center overflow-hidden">
+                    <SendNFTProvider>
                         <AnimatePresence mode="popLayout">
                             <SendNFTs
                                 setIsSendNFTsModalOpen={setIsSendNFTsModalOpen}
                             />
                         </AnimatePresence>
-                    </DrawerContent>
-                </Drawer>
-            </SendNFTProvider>
+                    </SendNFTProvider>
+                </DrawerContent>
+            </Drawer>
         );
     }
     return (
-        <SendNFTProvider>
-            <Dialog
-                open={isSendNFTsModalOpen}
-                onOpenChange={setIsSendNFTsModalOpen}
+        <Dialog
+            open={isSendNFTsModalOpen}
+            onOpenChange={setIsSendNFTsModalOpen}
+        >
+            <DialogContent
+                showClose={false}
+                className="p-0 w-[400px] h-[556px] rounded-3xl border cursor-default flex flex-col justify-start items-start overflow-hidden"
             >
-                <DialogContent
-                    showClose={false}
-                    className="p-0 w-[400px] h-[486px] rounded-3xl border cursor-default flex flex-col justify-start items-start overflow-hidden"
-                >
+                <SendNFTProvider>
                     <AnimatePresence mode="popLayout">
                         <SendNFTs
                             setIsSendNFTsModalOpen={setIsSendNFTsModalOpen}
                         />
                     </AnimatePresence>
-                </DialogContent>
-            </Dialog>
-        </SendNFTProvider>
+                </SendNFTProvider>
+            </DialogContent>
+        </Dialog>
     );
 };
 

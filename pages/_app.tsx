@@ -1,6 +1,6 @@
 import "@leapwallet/react-ui/styles.css";
-import "../styles/globals.css";
 import "@leapwallet/embedded-wallet-sdk-react/styles.css";
+import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { ChainProvider } from "@cosmos-kit/react";
 import { wallets as keplrWallets } from "@cosmos-kit/keplr";

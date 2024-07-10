@@ -115,12 +115,14 @@ export const getNFTTokenByIDQuery = gql`
 export const getNFTTokenByOwner = gql`
     query Tokens(
         $ownerAddrOrName: String
+        $collectionAddr: String
         $limit: Int
         $offset: Int
         $sortBy: TokenSort
     ) {
         tokens(
             ownerAddrOrName: $ownerAddrOrName
+            collectionAddr: $collectionAddr
             limit: $limit
             offset: $offset
             sortBy: $sortBy
