@@ -18,23 +18,23 @@ import ConnectWalletSideCurtain from "../components/ConnectWalletSideCurtain/con
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import "@leapwallet/elements/styles.css";
-import { createPublicClient } from 'viem';
-import { mainnet } from 'wagmi/chains';
-import { createConfig, WagmiConfig } from 'wagmi';
-import { http } from "viem"
-import { Layout } from '../components/Layout';
+import { createPublicClient } from "viem";
+import { mainnet } from "wagmi/chains";
+import { createConfig, WagmiConfig } from "wagmi";
+import { http } from "viem";
+import { Layout } from "../components/Layout";
 
 if (typeof global.self === "undefined") {
     (global as any).self = global;
 }
 
 const config = createConfig({
-  autoConnect: true,
-  publicClient: createPublicClient({
-    chain: mainnet,
-    transport: http()
-  }),
-})
+    autoConnect: true,
+    publicClient: createPublicClient({
+        chain: mainnet,
+        transport: http(),
+    }),
+});
 
 const updatedChains = chains.map((chain) => {
     if (chain.chain_id === "stargaze-1") {
@@ -108,38 +108,43 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
             </Head>
 
             <WagmiConfig config={config}>
-        <GraphqlProvider client={client}>
-          <LeapUiTheme defaultTheme={ThemeName.DARK}>
-            <ChainProvider
-              chains={updatedChains}
-              assetLists={assets}
-              //@ts-ignore
-              walletModal={ConnectWalletSideCurtain}
-              //@ts-ignore
-              wallets={wallets}
-              walletConnectOptions={{
-                signClient: {
-                  projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || "",
-                  relayUrl: "wss://relay.walletconnect.org",
-                  metadata: {
-                    name: "Celestine Sloths Society Shop",
-                    description: "Celestine Sloths Society Shop",
-                    url: "https://www.celestineslothsociety.com",
-                    icons: [""],
-                  },
-                },
-              }}
-              signerOptions={signerOptions}
-            >
-              <Layout>
-                  <Component {...pageProps} />
-                  {!!cosmosCapsuleWallet && <CustomCapsuleModalViewX />}
-              </ Layout>
-            </ChainProvider>
-          </LeapUiTheme>
-          p0
-        </GraphqlProvider>
-      </WagmiConfig>
+                <GraphqlProvider client={client}>
+                    <LeapUiTheme defaultTheme={ThemeName.DARK}>
+                        <ChainProvider
+                            chains={updatedChains}
+                            assetLists={assets}
+                            //@ts-ignore
+                            walletModal={ConnectWalletSideCurtain}
+                            //@ts-ignore
+                            wallets={wallets}
+                            walletConnectOptions={{
+                                signClient: {
+                                    projectId:
+                                        process.env.NEXT_PUBLIC_WC_PROJECT_ID ||
+                                        "",
+                                    relayUrl: "wss://relay.walletconnect.org",
+                                    metadata: {
+                                        name: "Celestine Sloths Society Shop",
+                                        description:
+                                            "Celestine Sloths Society Shop",
+                                        url: "https://www.celestineslothsociety.com",
+                                        icons: [""],
+                                    },
+                                },
+                            }}
+                            signerOptions={signerOptions}
+                        >
+                            <Layout>
+                                <Component {...pageProps} />
+                                {!!cosmosCapsuleWallet && (
+                                    <CustomCapsuleModalViewX />
+                                )}
+                            </Layout>
+                        </ChainProvider>
+                    </LeapUiTheme>
+                    p0
+                </GraphqlProvider>
+            </WagmiConfig>
         </>
     );
 }

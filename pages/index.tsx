@@ -1,10 +1,8 @@
-import { ApolloProvider as GraphqlProvider } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { ElementsContainerDynamic } from "../components/Header";
 import { NFTs } from "../components/NFTList";
-import SendNFTsModal from "../components/SendNFTs/SendNFTsModal";
 import { isValidAddressWithPrefix } from "../config/validateAddress";
 
 import { useChain } from "@cosmos-kit/react";
@@ -14,7 +12,6 @@ import {
     defaultBlurs,
     defaultBorderRadii,
 } from "@leapwallet/embedded-wallet-sdk-react";
-import { testnetClient } from "../config/apolloclient";
 
 export default function Home() {
     const [collection, setCollection] = useState<string | undefined>();
@@ -27,8 +24,7 @@ export default function Home() {
     } = useChain("stargazetestnet");
     const [isElementsModalOpen, setIsElementsModalOpen] =
         useState<boolean>(false);
-    const [isSendNFTsModalOpen, setIsSendNFTsModalOpen] =
-        useState<boolean>(false);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const restURL = chain?.apis?.rest
         ? [0] && chain?.apis?.rest[0].address
@@ -147,14 +143,6 @@ export default function Home() {
                     isOpen={isElementsModalOpen}
                     setIsOpen={setIsElementsModalOpen}
                 />
-                <div className="leap-ui dark">
-                    <GraphqlProvider client={testnetClient}>
-                        <SendNFTsModal
-                            isSendNFTsModalOpen={isSendNFTsModalOpen}
-                            setIsSendNFTsModalOpen={setIsSendNFTsModalOpen}
-                        />
-                    </GraphqlProvider>
-                </div>
             </div>
         </>
     );
