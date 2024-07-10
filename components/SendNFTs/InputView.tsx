@@ -1,6 +1,6 @@
 import { Button } from "@leapwallet/react-ui";
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     FaChevronDown,
     FaCircleUser,
@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa6";
 import { useSendNFT } from "../../context/SendNFT";
 import Image from "next/image";
+import { sliceAddress } from "../../config/formatAddress";
 
 type InputViewProps = {
     setIsSendNFTsModalOpen: (isOpen: boolean) => void;
@@ -23,6 +24,10 @@ const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
             setInputStateActive(true);
         }
     }, [toAddress]);
+
+    const isDisabled = useMemo(() => {
+        return !selectedNFT || !toAddress;
+    }, [selectedNFT, toAddress]);
 
     return (
         <motion.div
@@ -54,18 +59,20 @@ const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
                     You’re sending
                 </div>
                 <div className="h-[1px] w-full bg-muted"></div>
-                {selectedNFT ? (
-                    <NFTSelected nft={selectedNFT} />
-                ) : (
-                    <NFTSelectButton />
-                )}
+                <AnimatePresence mode="popLayout">
+                    {selectedNFT ? (
+                        <NFTSelected nft={selectedNFT} />
+                    ) : (
+                        <NFTSelectButton />
+                    )}
+                </AnimatePresence>
             </div>
             <div className="w-full flex flex-col justify-start items-start rounded-xl bg-card">
                 <div className="pl-4 pr-3 py-3 text-sm font-medium text-card-foreground">
                     To
                 </div>
                 <div className="h-[1px] w-full bg-muted"></div>
-                <div className="flex group flex-row justify-between w-full items-center p-4 h-[60px] gap-4">
+                <AnimatePresence mode="popLayout">
                     {inputStateActive ? (
                         <InputAddressArea
                             setInputStateActive={setInputStateActive}
@@ -75,10 +82,13 @@ const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
                             setInputStateActive={setInputStateActive}
                         />
                     )}
-                </div>
+                </AnimatePresence>
             </div>
 
-            <Button className="w-full mt-auto rounded-full" disabled={true}>
+            <Button
+                className="w-full mt-auto rounded-full"
+                disabled={isDisabled}
+            >
                 Send
             </Button>
         </motion.div>
@@ -93,7 +103,17 @@ function InputAddressDisplay({
     const { setToAddress, toAddress } = useSendNFT();
 
     return (
-        <>
+        <motion.div
+            key={"input-address-display"}
+            transition={{
+                duration: 0.2,
+                stiffness: 80,
+            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            className="flex group flex-row justify-between w-full items-center p-4 h-[60px] gap-4"
+        >
             <div
                 className=" cursor-pointer flex flex-row justify-start items-center gap-2 flex-1"
                 onClick={() => {
@@ -101,7 +121,9 @@ function InputAddressDisplay({
                 }}
             >
                 <FaCircleUser className="text-muted-foreground w-5 h-5" />
-                <div className="flex-1 text-left">{toAddress}</div>
+                <div className="flex-1 text-left font-bold text-sm leading-[20px] text-card-foreground">
+                    {toAddress ? sliceAddress(toAddress) : ""}
+                </div>
             </div>
             <FaCircleXmark
                 onClick={() => {
@@ -109,7 +131,7 @@ function InputAddressDisplay({
                 }}
                 className="cursor-pointer text-muted-foreground rounded-full w-4 h-4"
             />
-        </>
+        </motion.div>
     );
 }
 
@@ -128,9 +150,19 @@ function InputAddressArea({
     }, []);
 
     return (
-        <>
+        <motion.div
+            key={"input-address-area"}
+            transition={{
+                duration: 0.2,
+                stiffness: 80,
+            }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="flex group flex-row justify-between w-full items-center p-4 h-[60px] gap-4"
+        >
             <input
-                className="font-bold text-lg text-muted-foreground bg-card outline-none"
+                className="font-bold text-lg text-card-foreground placeholder:text-muted-foreground bg-card outline-none"
                 placeholder="Enter address"
                 ref={ref}
                 value={toAddress}
@@ -158,7 +190,7 @@ function InputAddressArea({
             >
                 Paste
             </button>
-        </>
+        </motion.div>
     );
 }
 
@@ -166,15 +198,23 @@ function NFTSelectButton() {
     const { setStep } = useSendNFT();
 
     return (
-        <div
-            className="flex flex-row justify-between w-full items-center p-4 cursor-pointer"
+        <motion.div
+            key={"nft-select-button"}
+            transition={{
+                duration: 0.2,
+                stiffness: 80,
+            }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="flex flex-row justify-between w-full items-center p-4 h-[60px] cursor-pointer"
             onClick={() => setStep(1)}
         >
             <div className="font-bold text-lg text-muted-foreground">
                 Select NFTs
             </div>
             <FaChevronDown className="text-muted-foreground" />
-        </div>
+        </motion.div>
     );
 }
 
@@ -186,7 +226,17 @@ function NFTSelected({ nft }: { nft: any }) {
     const { setSelectedNFT } = useSendNFT();
 
     return (
-        <div className="flex flex-row justify-between w-full items-center gap-4 p-4">
+        <motion.div
+            key={"nft-selected"}
+            transition={{
+                duration: 0.2,
+                stiffness: 80,
+            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            className="flex flex-row justify-between w-full items-center gap-4 p-4 h-[60px]"
+        >
             <div className="flex flex-row justify-start items-center gap-2 flex-1">
                 <Image
                     src={url}
@@ -203,9 +253,9 @@ function NFTSelected({ nft }: { nft: any }) {
                 onClick={() => {
                     setSelectedNFT(undefined);
                 }}
-                className="cursor-pointer text-card-foreground rounded-full w-4 h-4"
+                className="cursor-pointer text-muted-foreground rounded-full w-4 h-4"
             />
-        </div>
+        </motion.div>
     );
 }
 
