@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useSendNFT } from "../../../context/SendNFT";
 import { useEffect } from "react";
 import React from "react";
+import { useChain } from "@cosmos-kit/react";
 
 export default function InputAddressArea({
     setInputStateActive,
