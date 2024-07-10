@@ -2,7 +2,7 @@ import "@leapwallet/cosmos-social-login-capsule-provider-ui/styles.css";
 import "../styles/globals.css";
 import "@leapwallet/embedded-wallet-sdk-react/styles.css";
 import type { AppProps } from "next/app";
-import { ChainProvider, useChain } from "@cosmos-kit/react";
+import { ChainProvider } from "@cosmos-kit/react";
 import { wallets as keplrWallets } from "@cosmos-kit/keplr";
 import { wallets as leapWallets } from "@cosmos-kit/leap";
 import { chains, assets } from "chain-registry";
@@ -16,13 +16,26 @@ import Head from "next/head";
 import { SignerOptions, Wallet } from "@cosmos-kit/core";
 import ConnectWalletSideCurtain from "../components/ConnectWalletSideCurtain/connectWalletSideCurtain";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "@leapwallet/elements/styles.css";
 import { OAuthMethod } from "@leapwallet/cosmos-social-login-capsule-provider";
+import { createPublicClient } from 'viem';
+import { mainnet } from 'wagmi/chains';
+import { createConfig, WagmiConfig } from 'wagmi';
+import { http } from "viem"
+import { Layout } from '../components/Layout';
 
 if (typeof global.self === "undefined") {
   (global as any).self = global;
 }
+
+const config = createConfig({
+  autoConnect: true,
+  publicClient: createPublicClient({
+    chain: mainnet,
+    transport: http()
+  }),
+})
 
 const updatedChains = chains.map((chain) => {
   if (chain.chain_id === "stargaze-1") {
@@ -91,35 +104,39 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
         <title>Celestine Sloths Society Shop</title>
       </Head>
 
-      <GraphqlProvider client={client}>
-        <LeapUiTheme defaultTheme={ThemeName.DARK}>
-          <ChainProvider
-            chains={updatedChains}
-            assetLists={assets}
-            //@ts-ignore
-            walletModal={ConnectWalletSideCurtain}
-            //@ts-ignore
-            wallets={wallets}
-            walletConnectOptions={{
-              signClient: {
-                projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || "",
-                relayUrl: "wss://relay.walletconnect.org",
-                metadata: {
-                  name: "Celestine Sloths Society Shop",
-                  description: "Celestine Sloths Society Shop",
-                  url: "https://www.celestineslothsociety.com",
-                  icons: [""],
+      <WagmiConfig config={config}>
+        <GraphqlProvider client={client}>
+          <LeapUiTheme defaultTheme={ThemeName.DARK}>
+            <ChainProvider
+              chains={updatedChains}
+              assetLists={assets}
+              //@ts-ignore
+              walletModal={ConnectWalletSideCurtain}
+              //@ts-ignore
+              wallets={wallets}
+              walletConnectOptions={{
+                signClient: {
+                  projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || "",
+                  relayUrl: "wss://relay.walletconnect.org",
+                  metadata: {
+                    name: "Celestine Sloths Society Shop",
+                    description: "Celestine Sloths Society Shop",
+                    url: "https://www.celestineslothsociety.com",
+                    icons: [""],
+                  },
                 },
-              },
-            }}
-            signerOptions={signerOptions}
-          >
-            <Component {...pageProps} />
-            {!!cosmosCapsuleWallet && <CustomCapsuleModalViewX />}
-          </ChainProvider>
-        </LeapUiTheme>
-        p0
-      </GraphqlProvider>
+              }}
+              signerOptions={signerOptions}
+            >
+              <Layout>
+                  <Component {...pageProps} />
+                  {!!cosmosCapsuleWallet && <CustomCapsuleModalViewX />}
+              </ Layout>
+            </ChainProvider>
+          </LeapUiTheme>
+          p0
+        </GraphqlProvider>
+      </WagmiConfig>
     </>
   );
 }

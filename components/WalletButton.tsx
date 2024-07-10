@@ -3,13 +3,11 @@ import { useChain } from "@cosmos-kit/react";
 import { sliceAddress } from "../config/formatAddress";
 import Image from "next/image";
 import Text from "./Text";
-import { useQuery } from "@chakra-ui/media-query";
-import { useEffect, useState } from "react";
 import { formatNumber, fromSmall } from "../config/mathutils";
 import { IoMdCloseCircle } from "react-icons/io";
 
-interface WalletButtonOptions { 
-  balance?: string | null, openEmbeddedWalletModal: Function 
+interface WalletButtonOptions {
+  balance?: string | null, openEmbeddedWalletModal: Function
 }
 
 export function WalletButton({ balance, openEmbeddedWalletModal }: WalletButtonOptions) {
@@ -25,18 +23,18 @@ export function WalletButton({ balance, openEmbeddedWalletModal }: WalletButtonO
   return (
     <div className="flex items-center gap-2 h-10 justify-between border bg-white-100 border-white-100 rounded-3xl px-5 py-2">
       <button
-        onClick={() => { 
-          if(status === 'Connected') { 
+        onClick={() => {
+          if(status === 'Connected') {
             openEmbeddedWalletModal();
           }
           else {
             openView();
           }
-          
+
       }}
         disabled={status === "Connecting"}
         className="flex items-center gap-2 justify-between "
-        
+
       >
         <Image
           color="#000"
