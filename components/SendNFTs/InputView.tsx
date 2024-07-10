@@ -1,6 +1,6 @@
 import { Button } from "@leapwallet/react-ui";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     FaChevronDown,
     FaCircleUser,
@@ -15,7 +15,14 @@ type InputViewProps = {
 };
 
 const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
-    const { selectedNFT } = useSendNFT();
+    const { selectedNFT, toAddress } = useSendNFT();
+    const [inputStateActive, setInputStateActive] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (!toAddress) {
+            setInputStateActive(true);
+        }
+    }, [toAddress]);
 
     return (
         <motion.div
@@ -58,9 +65,16 @@ const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
                     To
                 </div>
                 <div className="h-[1px] w-full bg-muted"></div>
-                <div className="flex group flex-row justify-between w-full items-center p-4">
-                    <InputAddressArea />
-                    <InputAddressDisplay />
+                <div className="flex group flex-row justify-between w-full items-center p-4 h-[60px] gap-4">
+                    {inputStateActive ? (
+                        <InputAddressArea
+                            setInputStateActive={setInputStateActive}
+                        />
+                    ) : (
+                        <InputAddressDisplay
+                            setInputStateActive={setInputStateActive}
+                        />
+                    )}
                 </div>
             </div>
 
@@ -71,39 +85,67 @@ const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
     );
 };
 
-function InputAddressDisplay() {
-    const { setSelectedNFT } = useSendNFT();
+function InputAddressDisplay({
+    setInputStateActive,
+}: {
+    setInputStateActive: (active: boolean) => void;
+}) {
+    const { setToAddress, toAddress } = useSendNFT();
+
     return (
         <>
-            <div className="block group-focus:hidden flex flex-row justify-start items-center gap-2">
-                <FaCircleUser className=" w-5 h-5" />
+            <div
+                className=" cursor-pointer flex flex-row justify-start items-center gap-2 flex-1"
+                onClick={() => {
+                    setInputStateActive(true);
+                }}
+            >
+                <FaCircleUser className="text-muted-foreground w-5 h-5" />
+                <div className="flex-1 text-left">{toAddress}</div>
             </div>
             <FaCircleXmark
                 onClick={() => {
-                    setSelectedNFT(undefined);
+                    setToAddress(undefined);
                 }}
-                className="block group-focus:hidden cursor-pointer text-card-foreground rounded-full w-4 h-4"
+                className="cursor-pointer text-muted-foreground rounded-full w-4 h-4"
             />
         </>
     );
 }
 
-function InputAddressArea() {
+function InputAddressArea({
+    setInputStateActive,
+}: {
+    setInputStateActive: (active: boolean) => void;
+}) {
     const { setToAddress, toAddress } = useSendNFT();
+    const ref = React.useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.focus();
+        }
+    }, []);
 
     return (
         <>
             <input
-                className="hidden group-focus:block font-bold text-lg text-muted-foreground bg-card outline-none"
+                className="font-bold text-lg text-muted-foreground bg-card outline-none"
                 placeholder="Enter address"
+                ref={ref}
                 value={toAddress}
                 onChange={(event) => {
                     setToAddress(event?.target?.value);
                 }}
+                onBlur={() => {
+                    if (toAddress && toAddress.length > 0) {
+                        setInputStateActive(false);
+                    }
+                }}
             />
             <button
                 style={{ background: `#29A8741A` }}
-                className="hidden group-focus:block rounded-full px-3 py-1 text-primary font-bold text-sm"
+                className="rounded-full px-3 py-1 text-primary font-bold text-sm"
                 onClick={async () => {
                     try {
                         const text =
