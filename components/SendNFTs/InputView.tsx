@@ -15,7 +15,7 @@ type InputViewProps = {
 };
 
 const InputView = ({ setIsSendNFTsModalOpen }: InputViewProps) => {
-    const { selectedNFT, setStep, toAddress, setToAddress } = useSendNFT();
+    const { selectedNFT } = useSendNFT();
 
     return (
         <motion.div
