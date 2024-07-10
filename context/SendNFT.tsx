@@ -108,6 +108,7 @@ export function SendNFTProvider({ children }: { children: React.ReactNode }) {
     const handleSendNFT = useCallback(async () => {
         if (step === 2) {
             setStep(0);
+            setSelectedNFT(undefined);
             return;
         }
 
