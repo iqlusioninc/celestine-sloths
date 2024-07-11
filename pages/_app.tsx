@@ -1,6 +1,6 @@
-import "@leapwallet/cosmos-social-login-capsule-provider-ui/styles.css";
 import "../styles/globals.css";
 import "@leapwallet/embedded-wallet-sdk-react/styles.css";
+import "@leapwallet/cosmos-social-login-capsule-provider-ui/styles.css";
 import type { AppProps } from "next/app";
 import { ChainProvider } from "@cosmos-kit/react";
 import { wallets as keplrWallets } from "@cosmos-kit/keplr";
@@ -147,7 +147,7 @@ export function CustomCapsuleModalViewX() {
   const [showCapsuleModal, setShowCapsuleModal] = useState(false);
 
   return (
-    <div className="leap-ui dark z-[9999] fixed">
+    <div className="leap-ui dark !z-[99999] fixed">
       <CCUI
         showCapsuleModal={showCapsuleModal}
         setShowCapsuleModal={setShowCapsuleModal}
