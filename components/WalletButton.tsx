@@ -1,81 +1,75 @@
-import WalletIcon from "../public/account_balance_wallet.svg";
-import { useChain } from "@cosmos-kit/react";
-import { sliceAddress } from "../config/formatAddress";
-import Image from "next/image";
-import Text from "./Text";
-import { formatNumber, fromSmall } from "../config/mathutils";
-import { IoMdCloseCircle } from "react-icons/io";
+import WalletIcon from '../public/account_balance_wallet.svg'
+import { useChain } from '@cosmos-kit/react'
+import { sliceAddress } from '../config/formatAddress'
+import Image from 'next/image'
+import Text from './Text'
+import { formatNumber, fromSmall } from '../config/mathutils'
+import { IoMdCloseCircle } from 'react-icons/io'
+import { DenomInfo, TIA_MINIMAL_DENOM } from '../hooks/useBalances'
 
 interface WalletButtonOptions {
-  balance?: string | null, openEmbeddedWalletModal: Function
+  balances?: Record<string, { amount: string; denom: DenomInfo }> | null
+  openEmbeddedWalletModal: Function
 }
 
-export function WalletButton({ balance, openEmbeddedWalletModal }: WalletButtonOptions) {
-  const { openView, status, address, chain, disconnect } = useChain("stargaze");
+export function WalletButton({ balances, openEmbeddedWalletModal }: WalletButtonOptions) {
+  const { openView, status, address, chain, disconnect } = useChain('stargaze')
   console.log(address) // leave it for debugging
-  let text = "Connect Wallet";
-  if (status === "Connected") {
-    text = sliceAddress(address ?? "");
-  } else if (status === "Connecting") {
-    text = "Connecting...";
+  let text = 'Connect Wallet'
+  if (status === 'Connected') {
+    text = sliceAddress(address ?? '')
+  } else if (status === 'Connecting') {
+    text = 'Connecting...'
   }
 
   return (
-    <div className="flex items-center gap-2 h-10 justify-between border bg-white-100 border-white-100 rounded-3xl px-5 py-2">
+    <div className='flex items-center gap-2 h-10 justify-between border bg-white-100 border-white-100 rounded-3xl px-5 py-2'>
       <button
         onClick={() => {
-          if(status === 'Connected') {
-            openEmbeddedWalletModal();
+          if (status === 'Connected') {
+            openEmbeddedWalletModal()
+          } else {
+            openView()
           }
-          else {
-            openView();
-          }
-
-      }}
-        disabled={status === "Connecting"}
-        className="flex items-center gap-2 justify-between "
-
+        }}
+        disabled={status === 'Connecting'}
+        className='flex items-center gap-2 justify-between '
       >
         <Image
-          color="#000"
+          color='#000'
           src={WalletIcon}
-          alt="wallet"
+          alt='wallet'
           style={{
-            filter: "invert(1)",
+            filter: 'invert(1)',
           }}
           height={16}
           width={16}
         />
-        <div className="flex flex-col items-center gap-0 justify-center">
-          {status === "Connected" && (
-            <Text
-              size="sm"
-              color="text-black-100 font-bold"
-              className="m-0 p-0"
-            >
-              {formatNumber(fromSmall(balance ?? "0").decimalPlaces(3))} STARS
+        <div className='flex flex-col items-center gap-0 justify-center'>
+          {status === 'Connected' && (
+            <Text size='sm' color='text-black-100 font-bold' className='m-0 p-0'>
+              {formatNumber(
+                fromSmall(balances?.[TIA_MINIMAL_DENOM]?.amount ?? '0').decimalPlaces(3),
+              )}{' '}
+              TIA
             </Text>
           )}
           <Text
-            size={status === "Connected" ? "xs" : "sm"}
-            color={
-              status === "Connected"
-                ? "text-black-100 "
-                : "text-black-100 font-bold"
-            }
-            className={status === "Connected" ? "mt-[-6px] p-0" : "mt-0 p-0"}
+            size={status === 'Connected' ? 'xs' : 'sm'}
+            color={status === 'Connected' ? 'text-black-100 ' : 'text-black-100 font-bold'}
+            className={status === 'Connected' ? 'mt-[-6px] p-0' : 'mt-0 p-0'}
           >
             {text}
           </Text>
         </div>
       </button>
-      {status === "Connected" && (
+      {status === 'Connected' && (
         <button onClick={disconnect}>
-          <span title="Disconnect Wallet">
-            <IoMdCloseCircle size={16} title="Disconnect Wallet" />
+          <span title='Disconnect Wallet'>
+            <IoMdCloseCircle size={16} title='Disconnect Wallet' />
           </span>
         </button>
       )}
     </div>
-  );
+  )
 }

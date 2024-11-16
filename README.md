@@ -13,13 +13,13 @@ Check out our sample website for the BadKids collection here: https://badkids.sh
 ![image (1)](https://github.com/leapwallet/bad-kids-shop/assets/110881421/44c730c0-cd71-4a79-9bd5-ab991d6d5912)
 
 2. **Wallet Connectivity**: Integrating multiple methods for secure transactions:
-   1. Connect and sign a transaction using MetaMask (utilizes Leap’s MetaMask Snaps).
-   2. Log in with email and sign transactions (utilizes [Leap’s Social login SDK](https://x.com/leap_cosmos/status/1730626232168092141?s=20)).
-   3. Connect with Leap or Keplr.
+    1. Connect and sign a transaction using MetaMask (utilizes Leap’s MetaMask Snaps).
+    2. Log in with email and sign transactions (utilizes [Leap’s Social login SDK](https://x.com/leap_cosmos/status/1730626232168092141?s=20)).
+    3. Connect with Leap or Keplr.
 
 <img width="1000" alt="image (2)" src="https://github.com/leapwallet/bad-kids-shop/assets/110881421/280c9286-6543-4c7e-85a5-3602978c280d">
 
-3. **Get STARS Feature**: Simplifies the process of acquiring the required STARS tokens using assets from other Cosmos chains, EVM chains, or fiat, without having to navigate between different interfaces. This feature is powered by [Leap’s Elements SDK](https://x.com/leap_cosmos/status/1686051798086479872?s=20).
+1. **Get Tokens Feature**: Simplifies the process of acquiring the required tokens using assets from other Cosmos chains, EVM chains, or fiat, without having to navigate between different interfaces. This feature is powered by [Leap’s Elements SDK](https://x.com/leap_cosmos/status/1686051798086479872?s=20).
 
 ![image (3)](https://github.com/leapwallet/bad-kids-shop/assets/110881421/16e201c5-8d34-4fda-b247-021de0e273d3)
 
@@ -29,16 +29,15 @@ Our repository is structured to enable easy customization and deployment for you
 
 ## Table of Contents
 
-- [Celestine Sloths Shop](#celestine-sloths-shop)
-  - [Table of Contents](#table-of-contents)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-  - [Environment Variables](#environment-variables)
-    - [Setting up Environment Variables](#setting-up-environment-variables)
-  - [Usage](#usage)
-  - [Contributing](#contributing)
-  - [License](#license)
+-   [Celestine Sloths Shop](#celestine-sloths-shop)
+    -   [Table of Contents](#table-of-contents)
+    -   [Getting Started](#getting-started)
+        -   [Prerequisites](#prerequisites)
+        -   [Installation](#installation)
+    -   [Environment Variables](#environment-variables)
+        -   [Setting up Environment Variables](#setting-up-environment-variables)
+    -   [Contributing](#contributing)
+    -   [License](#license)
 
 ## Getting Started
 
@@ -46,30 +45,30 @@ Our repository is structured to enable easy customization and deployment for you
 
 List any software or tools that need to be installed before running the project.
 
-- [Node.js](https://nodejs.org/) (version x.x.x)
-- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/) (choose one)
+-   [Node.js](https://nodejs.org/) (version x.x.x)
+-   [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/) (choose one)
 
 ### Installation
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/leapwallet/bad-kids-shop.git
-   ```
+    ```bash
+    git clone https://github.com/leapwallet/bad-kids-shop.git
+    ```
 
 2. Navigate to the project directory:
 
-   ```bash
-   cd bad-kids-shop
-   ```
+    ```bash
+    cd bad-kids-shop
+    ```
 
 3. Install dependencies:
 
-   ```bash
-   npm install
-   # or
-   yarn
-   ```
+    ```bash
+    npm install
+    # or
+    yarn
+    ```
 
 ## Environment Variables
 
@@ -101,20 +100,20 @@ NEXT_PUBLIC_WC_PROJECT_ID=
 
 1. Create a `.env.local` file in the root of your project.
 
-   ```plaintext
-   // .env.local
+    ```plaintext
+    // .env.local
 
-   NEXT_PUBLIC_NODE_REST_ENDPOINT=
-   NEXT_PUBLIC_NODE_RPC_ENDPOINT=
-   NEXT_PUBLIC_STARGAZE_GRAPHQL_ENDPOINT=
-   NEXT_PUBLIC_STARGAZE_MARKET_CONTRACT=
-   NEXT_PUBLIC_BAD_KIDS_COLLECTION_ID=
+    NEXT_PUBLIC_NODE_REST_ENDPOINT=
+    NEXT_PUBLIC_NODE_RPC_ENDPOINT=
+    NEXT_PUBLIC_STARGAZE_GRAPHQL_ENDPOINT=
+    NEXT_PUBLIC_STARGAZE_MARKET_CONTRACT=
+    NEXT_PUBLIC_BAD_KIDS_COLLECTION_ID=
 
 
-   NEXT_PUBLIC_WC_PROJECT_ID=
-   NEXT_PUBLIC_CAPSULE_KEY=
-   NEXT_PUBLIC_CAPSULE_ENV=
-   ```
+    NEXT_PUBLIC_WC_PROJECT_ID=
+    NEXT_PUBLIC_CAPSULE_KEY=
+    NEXT_PUBLIC_CAPSULE_ENV=
+    ```
 
 ````
 
