@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "@leapwallet/embedded-wallet-sdk-react/styles.css";
+import "@leapwallet/cosmos-social-login-capsule-provider-ui/styles.css";
 import type { AppProps } from "next/app";
 import { ChainProvider } from "@cosmos-kit/react";
 import { wallets as keplrWallets } from "@cosmos-kit/keplr";
@@ -17,11 +18,12 @@ import ConnectWalletSideCurtain from "../components/ConnectWalletSideCurtain/con
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import "@leapwallet/elements/styles.css";
-import { createPublicClient } from 'viem';
-import { mainnet } from 'wagmi/chains';
-import { createConfig, WagmiConfig } from 'wagmi';
-import { http } from "viem"
-import { Layout } from '../components/Layout';
+import { OAuthMethod } from "@leapwallet/cosmos-social-login-capsule-provider";
+import { createPublicClient } from "viem";
+import { mainnet } from "wagmi/chains";
+import { createConfig, WagmiConfig } from "wagmi";
+import { http } from "viem";
+import { Layout } from "../components/Layout";
 
 if (typeof global.self === "undefined") {
   (global as any).self = global;
@@ -31,9 +33,9 @@ const config = createConfig({
   autoConnect: true,
   publicClient: createPublicClient({
     chain: mainnet,
-    transport: http()
+    transport: http(),
   }),
-})
+});
 
 const updatedChains = chains.map((chain) => {
   if (chain.chain_id === "stargaze-1") {
@@ -43,16 +45,12 @@ const updatedChains = chains.map((chain) => {
         ...chain.apis,
         rest: [
           {
-            address:
-              process.env.NEXT_PUBLIC_NODE_REST_ENDPOINT ||
-              "https://rest.stargaze-apis.com/",
+            address: process.env.NEXT_PUBLIC_NODE_REST_ENDPOINT || "https://rest.stargaze-apis.com/",
           },
         ].concat(chain.apis?.rest ?? []),
         rpc: [
           {
-            address:
-              process.env.NEXT_PUBLIC_NODE_REST_ENDPOINT ||
-              "https://rpc.stargaze-apis.com/",
+            address: process.env.NEXT_PUBLIC_NODE_REST_ENDPOINT || "https://rpc.stargaze-apis.com/",
           },
         ].concat(chain.apis?.rpc ?? []),
       },
@@ -69,19 +67,14 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
     // }
   };
 
-  const [cosmosCapsuleWallet, setCosmosCapsuleWallet] =
-    useState<LeapCapsuleWallet>();
+  const [cosmosCapsuleWallet, setCosmosCapsuleWallet] = useState<LeapCapsuleWallet>();
   const [wallets, setWallets] = useState();
 
   useEffect(() => {
     const fn = async () => {
       if (!cosmosCapsuleWallet) {
-        const WalletClass = await import(
-          "@cosmos-kit/leap-capsule-social-login"
-        ).then((m) => m.LeapCapsuleWallet);
-        const WalletInfo: Wallet = await import(
-          "../leap-social-login/registry"
-        ).then((m) => m.LeapCapsuleInfo);
+        const WalletClass = await import("@cosmos-kit/leap-capsule-social-login").then((m) => m.LeapCapsuleWallet);
+        const WalletInfo: Wallet = await import("../leap-social-login/registry").then((m) => m.LeapCapsuleInfo);
         const cosmosCapsuleWallet = new WalletClass(WalletInfo);
         setCosmosCapsuleWallet(cosmosCapsuleWallet);
         // @ts-ignore: Disabling typecheck until we figureout proper way of adding cosmoscapsulewallet in cosmos-kit
@@ -124,12 +117,11 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
                   },
                 },
               }}
-              signerOptions={signerOptions}
-            >
+              signerOptions={signerOptions}>
               <Layout>
-                  <Component {...pageProps} />
-                  {!!cosmosCapsuleWallet && <CustomCapsuleModalViewX />}
-              </ Layout>
+                <Component {...pageProps} />
+                {!!cosmosCapsuleWallet && <CustomCapsuleModalViewX />}
+              </Layout>
             </ChainProvider>
           </LeapUiTheme>
           p0
@@ -142,18 +134,12 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
 export default CreateCosmosApp;
 
 const CCUI = dynamic(
-  () =>
-    import("@leapwallet/cosmos-social-login-capsule-provider-ui").then(
-      (m) => m.CustomCapsuleModalView
-    ),
+  () => import("@leapwallet/cosmos-social-login-capsule-provider-ui").then((m) => m.CustomCapsuleModalView),
   { ssr: false }
 );
 
 const TransactionSigningModal = dynamic(
-  () =>
-    import("@leapwallet/cosmos-social-login-capsule-provider-ui").then(
-      (m) => m.TransactionSigningModal
-    ),
+  () => import("@leapwallet/cosmos-social-login-capsule-provider-ui").then((m) => m.TransactionSigningModal),
   { ssr: false }
 );
 
@@ -161,7 +147,7 @@ export function CustomCapsuleModalViewX() {
   const [showCapsuleModal, setShowCapsuleModal] = useState(false);
 
   return (
-    <>
+    <div className="leap-ui dark !z-[99999] fixed">
       <CCUI
         showCapsuleModal={showCapsuleModal}
         setShowCapsuleModal={setShowCapsuleModal}
@@ -172,8 +158,9 @@ export function CustomCapsuleModalViewX() {
         onLoginFailure={() => {
           window.failureFromCapsuleModal();
         }}
+        oAuthMethods={[OAuthMethod.GOOGLE, OAuthMethod.APPLE, OAuthMethod.TWITTER, OAuthMethod.DISCORD]}
       />
       <TransactionSigningModal dAppInfo={{ name: "Celestine Sloths" }} />
-    </>
+    </div>
   );
 }
