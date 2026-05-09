@@ -16,7 +16,6 @@ import {
 } from "../../config/constants";
 import HorizontalDivider from "../divider";
 // import { Images } from "images";
-import { useRouter } from "next/router";
 import { useMemo } from "react";
 import Text from "../Text";
 import { ConnectWalletCard } from "./ConnectWalletCard";
@@ -60,7 +59,6 @@ export function ConnectWalletSideCurtainContent({
     const { mainWallet: { walletStatus } = {}, mainWallet } = useWallet();
 
     // const redirectedFromSnaps = search.includes("metamask");
-    const router = useRouter();
 
     const _filteredWallets = useMemo(
         () =>
@@ -79,16 +77,12 @@ export function ConnectWalletSideCurtainContent({
         () =>
             walletOrder
                 .map((key) => {
-                    const isSupportedWallet = router.pathname.includes(
-                        "snapshot"
-                    )
-                        ? ["leap", "keplr"].includes(key)
-                        : [
-                              "leap",
-                              "keplr",
-                              "metaMask",
-                              "leap-cosmos-capsule",
-                          ].includes(key);
+                    const isSupportedWallet = [
+                        "leap",
+                        "keplr",
+                        "metaMask",
+                        "leap-cosmos-capsule",
+                    ].includes(key);
 
                     // @ts-ignore
                     const element: MainWalletBase = _filteredWallets.find(
@@ -105,7 +99,7 @@ export function ConnectWalletSideCurtainContent({
                 .sort((a, b) => {
                     return a?.walletInfo.name === b?.walletInfo.name ? -1 : 1;
                 }),
-        [router?.pathname, _filteredWallets]
+        [_filteredWallets]
     );
 
     function onWalletClicked(wallet: MainWalletBase) {
@@ -168,18 +162,16 @@ export function ConnectWalletSideCurtainContent({
                 </div>
             </div>
             <div className="flex w-full flex-col pb-6">
-                {!router?.pathname?.includes("snapshot") && (
-                    <div className="flex flex-row items-center justify-start gap-1">
-                        <Text
-                            size="sm"
-                            color="text-black-100 dark:text-white-100"
-                            className="pl-6 pr-3 py-3"
-                        >
-                            New to Cosmos
-                        </Text>
-                        <HorizontalDivider outerClassName="flex-1 pr-6" />
-                    </div>
-                )}
+                <div className="flex flex-row items-center justify-start gap-1">
+                    <Text
+                        size="sm"
+                        color="text-black-100 dark:text-white-100"
+                        className="pl-6 pr-3 py-3"
+                    >
+                        New to Cosmos
+                    </Text>
+                    <HorizontalDivider outerClassName="flex-1 pr-6" />
+                </div>
                 {[
                     filteredWallets[2],
                     // {

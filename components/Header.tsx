@@ -50,17 +50,6 @@ export function Header({
       <div id='nav-menu' className={`md:block ${isMenuOpen ? '' : 'hidden'}`}>
         <div className='flex flex-row gap-3 flex-wrap'>
           <button
-            onClick={() => {
-              router.push('/snapshot')
-            }}
-            className='flex gap-2 items-center h-10 justify-between border border-white-100 rounded-3xl px-5 py-2'
-          >
-            <Text size='sm' color='text-white-100 font-bold'>
-              Snapshot
-            </Text>
-          </button>
-
-          <button
             onClick={() => window.open('https://twitter.com/CelestineSloths', '_blank')}
             className='flex flex-row gap-2 h-10 items-center justify-between border border-white-100 rounded-3xl px-5 py-2'
           >
